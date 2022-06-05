@@ -1,9 +1,9 @@
 import React from 'react';
 import user from '../../assets/users.png';
 
-export default function Card() {
+export default function Card(params) {
   return (
-    <div className="flex p-3">
+    <div className="flex p-3 cursor-pointer" onClick={params.onClick}>
       <img src={user} alt="user" className="w-16 h-16 rounded-xl ml-3" />
       <div className="p-2 ml-2">
         <p className="text-dark-color text-lg font-medium max-w-sm">Thersa Weeb</p>
