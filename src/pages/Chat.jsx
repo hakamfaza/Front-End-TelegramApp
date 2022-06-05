@@ -4,6 +4,7 @@ import user from '../assets/users.png';
 import Search from '../components/Search/Search';
 import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 import { FiPlus } from 'react-icons/fi';
+import Headers from '../components/main/Headers';
 
 export default function Chat(params) {
   const [isMessage, setIsMessage] = useState(false);
@@ -31,12 +32,14 @@ export default function Chat(params) {
         <Card />
         <Card />
       </div>
-      <div className="bg-secondary col-span-3">
+      <div className=" border-solid border-l-[1px] border-grey-color bg-primary fixed right-0 w-9/12 h-screen">
         {isMessage ? (
-          <div>Hallo sosoo</div>
-        ) : (
           <div>
-            <div>Hallo</div>
+            <Headers />
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-grey-color">Please select a chat to start messaging</p>
           </div>
         )}
       </div>

@@ -3,7 +3,7 @@ import user from '../../assets/users.png';
 
 export default function Card(params) {
   return (
-    <div className="flex p-3 cursor-pointer" onClick={params.onClick}>
+    <div className="flex p-3 cursor-pointer pr-2" onClick={params.onClick}>
       <img src={user} alt="user" className="w-16 h-16 rounded-xl ml-3" />
       <div className="p-2 ml-2">
         <p className="text-dark-color text-lg font-medium max-w-sm">Thersa Weeb</p>
@@ -13,7 +13,7 @@ export default function Card(params) {
           vitae.
         </p>
       </div>
-      <div className="ml-4">
+      <div className="ml-1">
         <p className="text-grey-color text-sm mt-4">15:00</p>
         <p className="bg-secondary text-primary flex justify-center items-center w-5 h-5 text-center text-sm rounded-full p-1 mt-1">
           5
