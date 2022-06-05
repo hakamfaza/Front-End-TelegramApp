@@ -5,6 +5,7 @@ import Search from '../components/Search/Search';
 import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 import { FiPlus } from 'react-icons/fi';
 import Headers from '../components/main/Headers';
+import Footer from '../components/main/Footer';
 
 export default function Chat(params) {
   const [isMessage, setIsMessage] = useState(false);
@@ -36,6 +37,7 @@ export default function Chat(params) {
         {isMessage ? (
           <div>
             <Headers />
+            <Footer />
           </div>
         ) : (
           <div className="flex justify-center items-center h-full">
