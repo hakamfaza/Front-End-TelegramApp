@@ -6,6 +6,7 @@ import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 import { FiPlus } from 'react-icons/fi';
 import Headers from '../components/main/Headers';
 import Footer from '../components/main/Footer';
+import Bubbles from '../components/bubbles/Bubbles';
 
 export default function Chat(params) {
   const [isMessage, setIsMessage] = useState(false);
@@ -35,8 +36,9 @@ export default function Chat(params) {
       </div>
       <div className=" border-solid border-l-[1px] border-grey-color bg-primary fixed right-0 w-9/12 h-screen">
         {isMessage ? (
-          <div>
+          <div className="snap-y">
             <Headers />
+            <Bubbles />
             <Footer />
           </div>
         ) : (
