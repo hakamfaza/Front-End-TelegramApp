@@ -4,7 +4,7 @@ import { CgMenuGridO } from 'react-icons/cg';
 
 export default function Headers() {
   return (
-    <div className="h-24 drop-shadow-sm bg-white p-4">
+    <div className="h-24 drop-shadow-sm bg-white p-4 fixed w-9/12 z-10">
       <div className="flex">
         <img src={user} alt="" className="w-16 h-16 rounded-xl ml-3 cursor-pointer" />
         <div className="ml-5 p-2">

@@ -4,7 +4,7 @@ import { BsFillEmojiLaughingFill, BsFillRecordCircleFill } from 'react-icons/bs'
 
 export default function Footer() {
   return (
-    <div className="h-20 drop-shadow-lg bg-white p-4 absolute bottom-0 right-0 w-full">
+    <div className="h-20 drop-shadow-lg bg-white p-4 fixed bottom-0 w-9/12">
       <div className="flex p-2">
         <input
           type="text"

@@ -3,7 +3,7 @@ import user from '../../assets/users.png';
 
 export default function Bubbles() {
   return (
-    <div className="flex relative p-5">
+    <div className="flex relative p-3 w-9/12">
       <div className="relative w-20">
         <img src={user} alt="" className="w-16 h-16 rounded-xl ml-3 cursor-pointer absolute bottom-0 left-0" />
       </div>
