@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { AiFillEyeInvisible, AiFillEye, AiOutlineGoogle } from 'react-icons/ai';
 import { register } from '../redux/actions/auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [visibel, setVisible] = useState(false);
   const [form, setForm] = useState({
     username: '',
@@ -33,11 +35,15 @@ export default function Login() {
         console.log(err);
       });
   };
+
+  const onNavigate = () => {
+    navigate('/');
+  };
   return (
     <div className="bg-theme-primary flex items-center justify-center h-screen">
       <div className="drop-shadow-lg w-96 p-9 rounded-3xl bg-primary">
         <div className="flex text-center">
-          <IoIosArrowBack className="text-secondary text-xl ml-[-5px] cursor-pointer" />
+          <IoIosArrowBack className="text-secondary text-xl ml-[-5px] cursor-pointer" onClick={() => onNavigate()} />
           <p className="text-secondary font-medium text-2xl text-center ml-24 mt-[-5px]">Register</p>
         </div>
         <p className="text-dark-color text-sm mt-6 mb-5">Let’s create your account!</p>
