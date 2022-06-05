@@ -10,11 +10,11 @@ import Footer from '../components/main/Footer';
 export default function Chat(params) {
   const [isMessage, setIsMessage] = useState(false);
 
-  const userClick = () => {};
+  // const userClick = () => {};
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="w-full">
-        <div className="p-5 flex justify-between">
+        <div className="pl-5 pt-5 flex justify-between">
           <h3 className="text-secondary text-2xl font-medium">Telegram</h3>
           <HiOutlineMenuAlt1 className="text-secondary text-2xl mt-2 cursor-pointer" />
         </div>
