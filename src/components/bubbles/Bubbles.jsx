@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Bubbles(params) {
   return (
-    <div className="p-3 w-full relative">
+    <div className="p-3 w-full relative" onClick={params.delete}>
       <div className="flex justify-end">
         <div className="bg-white max-w-sm p-5 rounded-[35px] rounded-br-xl ml-3">
           <p className="text-dark-color">{params.message}</p>

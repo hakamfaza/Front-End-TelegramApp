@@ -20,6 +20,7 @@ import { RiChatSettingsLine } from 'react-icons/ri';
 import { MdOutlineLock, MdOutlineDevicesOther } from 'react-icons/md';
 import { VscGraphLine } from 'react-icons/vsc';
 import { RiImageEditLine } from 'react-icons/ri';
+import { deleteMessage } from '../redux/actions/chats';
 
 export default function Chat(params) {
   const navigate = useNavigate();
@@ -36,6 +37,9 @@ export default function Chat(params) {
   const [getActiveReceiver, setActiveReceiver] = useState({});
   const [getQuery, setQuery] = useState('');
   const [listChat, setListChat] = useState([]);
+
+  const [idMessage, setIdMessage] = useState('');
+  console.log(idMessage);
 
   useEffect(() => {
     dispatch(getDetailUser());
@@ -130,6 +134,18 @@ export default function Chat(params) {
     });
     setSocketio(socket);
   }, []);
+
+  // Delete Message
+  const onDelete = e => {
+    setIdMessage(e);
+    deleteMessage(idMessage)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   const [message, setMessage] = useState('');
   const onSubmitMessage = e => {
@@ -349,6 +365,7 @@ export default function Chat(params) {
                           ? `${process.env.REACT_APP_API_URL}/${item.sender_photo}`
                           : `${process.env.REACT_APP_API_URL}/profile.jpg`
                       }
+                      delete={() => onDelete(item.id)}
                     />
                   ) : (
                     <BubblesReceived
