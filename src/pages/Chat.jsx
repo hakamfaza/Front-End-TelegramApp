@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 import Card from '../components/card/Card';
@@ -10,7 +12,7 @@ import Bubbles from '../components/bubbles/Bubbles';
 import BubblesReceived from '../components/bubbles/BubblesReceived';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../redux/actions/users';
+import { getDetailUser, getUser, updatePhoto, updateUser } from '../redux/actions/users';
 
 import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 import { IoIosArrowBack, IoIosNotificationsOutline } from 'react-icons/io';
@@ -18,22 +20,85 @@ import { FiPlus } from 'react-icons/fi';
 import { RiChatSettingsLine } from 'react-icons/ri';
 import { MdOutlineLock, MdOutlineDevicesOther } from 'react-icons/md';
 import { VscGraphLine } from 'react-icons/vsc';
+import { RiImageEditLine } from 'react-icons/ri';
 
 export default function Chat(params) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [socketio, setSocketio] = useState(null);
-  const [isMessage, setIsMessage] = useState(false);
-  const [isMenu, setIsMenu] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [getActiveReceiver, setActiveReceiver] = useState({});
-  const [listChat, setListChat] = useState([]);
 
   const profile = JSON.parse(localStorage.getItem('user'));
   const receiver = JSON.parse(localStorage.getItem('receiver'));
 
+  const [socketio, setSocketio] = useState(null);
+  const [isMessage, setIsMessage] = useState(false);
+  const [isMenu, setIsMenu] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [getPhoto, setPhoto] = useState('');
+  const [getActiveReceiver, setActiveReceiver] = useState({});
+  const [getQuery, setQuery] = useState('');
+  const [listChat, setListChat] = useState([]);
+
   useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
+    dispatch(getDetailUser());
+  }, []);
+  const detail = useSelector(state => {
+    return state.detail.data;
+  });
+  console.log(detail);
+
+  const [form, setForm] = useState({
+    username: detail.username,
+    phone: detail.phone,
+    shortName: detail.short_name,
+    bio: detail.bio,
+    email: detail.email
+  });
+
+  const onChangePhoto = (e, field) => {
+    setPhoto({
+      photo: e.target.files
+    });
+  };
+
+  const onChange = (e, field) => {
+    e.preventDefault();
+    setForm({
+      ...form,
+      [field]: e.target.value
+    });
+  };
+
+  const onSave = () => {
+    const body = {
+      ...form
+    };
+
+    console.log(getPhoto.photo);
+    if (getPhoto) {
+      const changePhoto = new FormData();
+      changePhoto.append('photo', getPhoto.photo[0]);
+
+      updatePhoto(changePhoto)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      return;
+    }
+    updateUser(body)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    dispatch(getUser(getQuery));
+  }, []);
 
   const users = useSelector(state => {
     return state.user;
@@ -116,27 +181,44 @@ export default function Chat(params) {
                   onClick={() => onEditProfile()}
                   className="text-secondary text-xl ml-[-5px] cursor-pointer"
                 />
-                <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">{profile.short_name}</p>
+                <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">{detail.short_name}</p>
               </div>
               <div className="flex justify-center items-center p-5 flex-col mt-3">
                 <img
                   src={
-                    profile.photo
-                      ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                    detail.photo
+                      ? `${process.env.REACT_APP_API_URL}/${detail.photo}`
                       : `${process.env.REACT_APP_API_URL}/profile.jpg`
                   }
                   alt=""
                   className="w-20 h-20 rounded-3xl ml-3"
                 />
-                <h5 className="mt-3 text-xl font-medium">{profile.username}</h5>
-                <p className="tex-base text-grey-color">{profile.short_name}</p>
+                <label htmlFor="photo" className="text-xl cursor-pointer">
+                  <RiImageEditLine />
+                </label>
+                <input type="file" id="photo" hidden onChange={e => onChangePhoto(e, 'photo')} />
+                <input
+                  className="mt-3 text-xl font-medium text-center focus:outline-none"
+                  defaultValue={detail.username}
+                  onChange={e => onChange(e, 'username')}
+                />
+                <p className="tex-base text-grey-color">{detail.short_name || 'name'}</p>
               </div>
-              <div className="overflow-y-scroll mt-60 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
+              <div className="flex justify-center">
+                <button
+                  className="bg-secondary rounded-sm text-white font-medium p-2 pl-8 pr-8 flex items-center justify-end"
+                  onClick={e => onSave(e)}
+                >
+                  Save
+                </button>
+              </div>
+              <div className="overflow-y-scroll mt-72 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
                 <p className="text-dark-color font-medium text-lg">Account</p>
                 <input
                   id="phone"
                   type="text"
-                  defaultValue={'+375(29)9638433'}
+                  defaultValue={detail.phone}
+                  onChange={e => onChange(e, 'phone')}
                   className="w-full mt-2 focus:outline-none"
                 />
                 <label htmlFor="phone" className="text-secondary text-sm mt-1 cursor-pointer">
@@ -147,7 +229,8 @@ export default function Chat(params) {
                   <input
                     id="username"
                     type="text"
-                    defaultValue={'@wdlam'}
+                    defaultValue={detail.short_name}
+                    onChange={e => onChange(e, 'shortName')}
                     className="w-full focus:outline-none text-dark font-medium mt-5"
                   />
                   <label htmlFor="username" className="text-grey-color font-sm cursor-pointer">
@@ -159,7 +242,8 @@ export default function Chat(params) {
                   <textarea
                     id="bio"
                     type="text"
-                    defaultValue={`I’m Senior Frontend Developer from Microsoft`}
+                    defaultValue={detail.bio}
+                    onChange={e => onChange(e, 'bio')}
                     className="w-full focus:outline-none text-dark font-medium mt-5 min-h-[20px] overflow-hidden max-h-20"
                   />
                   <label htmlFor="bio" className="text-grey-color font-sm cursor-pointer">
@@ -205,27 +289,27 @@ export default function Chat(params) {
               <div className="flex justify-center items-center p-5 flex-col">
                 <img
                   src={
-                    profile.photo
-                      ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                    detail.photo
+                      ? `${process.env.REACT_APP_API_URL}/${detail.photo}`
                       : `${process.env.REACT_APP_API_URL}/profile.jpg`
                   }
                   alt=""
                   className="w-20 h-20 rounded-3xl ml-3"
                 />
-                <h5 className="mt-3 text-xl font-medium">{profile.username}</h5>
-                <p className="tex-base text-grey-color">{profile.short_name}</p>
+                <h5 className="mt-3 text-xl font-medium">{detail.username}</h5>
+                <p className="tex-base text-grey-color">{detail.short_name}</p>
               </div>
               <div className="pl-5 flex">
-                <Search />
+                <Search onChange={e => setQuery(e.target.value)} />
                 <FiPlus className="text-3xl text-secondary mt-3" />
               </div>
             </div>
             <div className="h-auto overflow-y-scroll fixed top-0 bottom-0 mt-[300px] left-0 bg-scroll z-10">
               {users.isLoading ? (
-                <div></div>
+                <div>Loading</div>
               ) : (
-                users.data.data.map((item, index) =>
-                  item.id !== profile.id ? (
+                users.data.data.map((item, index) => {
+                  return item.id !== profile.id ? (
                     <div key={index}>
                       <Card
                         onClick={() => selectReceiver(item)}
@@ -237,8 +321,8 @@ export default function Chat(params) {
                         }
                       />
                     </div>
-                  ) : null
-                )
+                  ) : null;
+                })
               )}
             </div>
           </>
