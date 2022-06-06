@@ -21,18 +21,18 @@ export default function Chat(params) {
   const [isMenu, setIsMenu] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [getValueUser, setValueUser] = useState([]);
-  console.log(getValueUser);
+  const profile = JSON.parse(localStorage.getItem('user'));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setValueUser(getUser());
-  }, []);
+    dispatch(getUser());
+  }, [dispatch]);
 
   const users = useSelector(state => {
     return state.user.data;
   });
-  console.log(users);
+  console.log(users.data);
 
   const onMenu = () => {
     if (isMenu) {
@@ -66,8 +66,16 @@ export default function Chat(params) {
                 <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">@wdlam</p>
               </div>
               <div className="flex justify-center items-center p-5 flex-col mt-3">
-                <img src={user} alt="" className="w-20 h-20 rounded-3xl ml-3" />
-                <h5 className="mt-3 text-xl font-medium">Gloria Mckinney</h5>
+                <img
+                  src={
+                    profile.photo
+                      ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                      : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                  }
+                  alt=""
+                  className="w-20 h-20 rounded-3xl ml-3"
+                />
+                <h5 className="mt-3 text-xl font-medium">{profile.username}</h5>
                 <p className="tex-base text-grey-color">@wdlam</p>
               </div>
               <div className="overflow-y-scroll mt-60 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
@@ -142,8 +150,16 @@ export default function Chat(params) {
               </div>
               {isMenu ? <Menu onProfile={() => onEditProfile()} /> : <> </>}
               <div className="flex justify-center items-center p-5 flex-col">
-                <img src={user} alt="" className="w-20 h-20 rounded-3xl ml-3" />
-                <h5 className="mt-3 text-xl font-medium">Gloria Mckinney</h5>
+                <img
+                  src={
+                    profile.photo
+                      ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                      : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                  }
+                  alt=""
+                  className="w-20 h-20 rounded-3xl ml-3"
+                />
+                <h5 className="mt-3 text-xl font-medium">{profile.username}</h5>
                 <p className="tex-base text-grey-color">@wdlam</p>
               </div>
               <div className="pl-5 flex">
@@ -152,15 +168,22 @@ export default function Chat(params) {
               </div>
             </div>
             <div className="h-auto overflow-y-scroll fixed top-0 bottom-0 mt-[300px] left-0 bg-scroll z-10">
-              <Card onClick={() => setIsMessage(true)} />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
+              {users.data.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <Card
+                      onClick={() => setIsMessage(true)}
+                      username={item.username}
+                      img={
+                        item.photo
+                          ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                          : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                      }
+                    />
+                    ;
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
