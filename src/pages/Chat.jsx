@@ -213,13 +213,13 @@ export default function Chat(params) {
                 </label>
                 <input type="file" id="photo" hidden onChange={e => onChangePhoto(e, 'photo')} />
                 <input
-                  className="mt-3 text-xl font-medium text-center focus:outline-none"
+                  className="mt-3 text-xl font-medium text-center border-b-[1px] border-solid border-dark-color pb-1 focus:outline-none"
                   defaultValue={detail.username}
                   onChange={e => onChange(e, 'username')}
                 />
-                <p className="tex-base text-grey-color">{detail.short_name || 'name'}</p>
+                {/* <p className="tex-base text-grey-color mt-2">{detail.short_name}</p> */}
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-[-10px]">
                 <button
                   className="bg-secondary rounded-sm text-white font-medium p-2 pl-8 pr-8 flex items-center justify-end"
                   onClick={e => onSave(e)}
@@ -227,7 +227,7 @@ export default function Chat(params) {
                   Save
                 </button>
               </div>
-              <div className="overflow-y-scroll mt-72 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
+              <div className="overflow-y-scroll mt-80 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
                 <p className="text-dark-color font-medium text-lg">Account</p>
                 <input
                   id="phone"
