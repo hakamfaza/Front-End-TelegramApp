@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { AiFillEyeInvisible, AiFillEye, AiOutlineGoogle } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../redux/actions/auth';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [visibel, setVisible] = useState(false);
   const [form, setForm] = useState({
     email: '',
@@ -25,6 +27,7 @@ export default function Login() {
     login(body)
       .then(response => {
         console.log(response);
+        navigate('/chat');
       })
       .catch(err => {
         console.log(err);

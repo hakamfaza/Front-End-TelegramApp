@@ -20,7 +20,7 @@ export const login = data => {
       .then(response => {
         resolve(response);
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('id', response.data.data.id);
+        localStorage.setItem('user', JSON.stringify(response.data.data));
       })
       .catch(error => {
         reject(error);

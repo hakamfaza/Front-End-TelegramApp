@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '../components/card/Card';
 import user from '../assets/users.png';
 import Search from '../components/Search/Search';
@@ -13,11 +13,26 @@ import Footer from '../components/main/Footer';
 import Menu from '../components/main/Menu';
 import Bubbles from '../components/bubbles/Bubbles';
 import BubblesReceived from '../components/bubbles/BubblesReceived';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../redux/actions/users';
 
 export default function Chat(params) {
   const [isMessage, setIsMessage] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [getValueUser, setValueUser] = useState([]);
+  console.log(getValueUser);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setValueUser(getUser());
+  }, []);
+
+  const users = useSelector(state => {
+    return state.user.data;
+  });
+  console.log(users);
 
   const onMenu = () => {
     if (isMenu) {

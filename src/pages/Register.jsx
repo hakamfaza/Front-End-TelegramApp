@@ -30,6 +30,7 @@ export default function Login() {
     register(body)
       .then(response => {
         console.log(response);
+        navigate('/');
       })
       .catch(err => {
         console.log(err);

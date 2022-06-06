@@ -1,12 +1,13 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import Router from './routers';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import { store } from './redux/store';
 
 function App() {
   return (
-    <div>
+    <Provider store={store}>
       <Router />
-    </div>
+    </Provider>
   );
 }
 
