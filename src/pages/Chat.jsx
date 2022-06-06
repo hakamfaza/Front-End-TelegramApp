@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
 import Card from '../components/card/Card';
-import user from '../assets/users.png';
 import Search from '../components/Search/Search';
+import Headers from '../components/main/Headers';
+import Footer from '../components/main/Footer';
+import Menu from '../components/main/Menu';
+import Bubbles from '../components/bubbles/Bubbles';
+import BubblesReceived from '../components/bubbles/BubblesReceived';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../redux/actions/users';
+
 import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 import { IoIosArrowBack, IoIosNotificationsOutline } from 'react-icons/io';
 import { FiPlus } from 'react-icons/fi';
 import { RiChatSettingsLine } from 'react-icons/ri';
 import { MdOutlineLock, MdOutlineDevicesOther } from 'react-icons/md';
 import { VscGraphLine } from 'react-icons/vsc';
-import Headers from '../components/main/Headers';
-import Footer from '../components/main/Footer';
-import Menu from '../components/main/Menu';
-import Bubbles from '../components/bubbles/Bubbles';
-import BubblesReceived from '../components/bubbles/BubblesReceived';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../redux/actions/users';
 
 export default function Chat(params) {
+  const dispatch = useDispatch();
+  const [socketio, setSocketio] = useState(null);
   const [isMessage, setIsMessage] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [getValueUser, setValueUser] = useState([]);
-  const profile = JSON.parse(localStorage.getItem('user'));
+  const [getActiveReceiver, setActiveReceiver] = useState({});
+  const [listChat, setListChat] = useState([]);
 
-  const dispatch = useDispatch();
+  const profile = JSON.parse(localStorage.getItem('user'));
+  const receiver = JSON.parse(localStorage.getItem('receiver'));
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
 
   const users = useSelector(state => {
-    return state.user.data;
+    return state.user;
   });
-  console.log(users.data);
 
   const onMenu = () => {
     if (isMenu) {
@@ -50,8 +55,56 @@ export default function Chat(params) {
     }
     setIsMenu(false);
   };
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_API_URL);
+    socket.on('send-message-response', response => {
+      // const receiver = JSON.parse(localStorage.getItem('receiver'));
+      if (receiver.username === response[0].sender || receiver.username === response[0].receiver) {
+        console.log(response);
+        setListChat(response);
+      }
+    });
+    setSocketio(socket);
+  }, []);
 
-  // const userClick = () => {};
+  const [message, setMessage] = useState('');
+  const onSubmitMessage = e => {
+    e.preventDefault();
+    // const receiver = JSON.parse(localStorage.getItem('receiver'));
+
+    const payload = {
+      sender: profile.username,
+      senderId: profile.id,
+      receiver: receiver.username,
+      receiverId: receiver.id,
+      message
+    };
+    setListChat([...listChat, payload]);
+
+    const data = {
+      sender: profile.id,
+      receiver: receiver.id,
+      isRead: false,
+      date: new Date(),
+      chatType: 'text',
+      message
+    };
+    socketio.emit('send-message', data);
+    setMessage('');
+  };
+
+  const selectReceiver = item => {
+    setListChat([]);
+    setActiveReceiver(item);
+    setIsMessage(true);
+    localStorage.setItem('receiver', JSON.stringify(item));
+    socketio.emit('join-room', profile);
+    const data = {
+      sender: profile.id,
+      receiver: item.id
+    };
+    socketio.emit('chat-history', data);
+  };
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="w-full col-span-1">
@@ -63,7 +116,7 @@ export default function Chat(params) {
                   onClick={() => onEditProfile()}
                   className="text-secondary text-xl ml-[-5px] cursor-pointer"
                 />
-                <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">@wdlam</p>
+                <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">{profile.short_name}</p>
               </div>
               <div className="flex justify-center items-center p-5 flex-col mt-3">
                 <img
@@ -76,7 +129,7 @@ export default function Chat(params) {
                   className="w-20 h-20 rounded-3xl ml-3"
                 />
                 <h5 className="mt-3 text-xl font-medium">{profile.username}</h5>
-                <p className="tex-base text-grey-color">@wdlam</p>
+                <p className="tex-base text-grey-color">{profile.short_name}</p>
               </div>
               <div className="overflow-y-scroll mt-60 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
                 <p className="text-dark-color font-medium text-lg">Account</p>
@@ -160,7 +213,7 @@ export default function Chat(params) {
                   className="w-20 h-20 rounded-3xl ml-3"
                 />
                 <h5 className="mt-3 text-xl font-medium">{profile.username}</h5>
-                <p className="tex-base text-grey-color">@wdlam</p>
+                <p className="tex-base text-grey-color">{profile.short_name}</p>
               </div>
               <div className="pl-5 flex">
                 <Search />
@@ -168,22 +221,25 @@ export default function Chat(params) {
               </div>
             </div>
             <div className="h-auto overflow-y-scroll fixed top-0 bottom-0 mt-[300px] left-0 bg-scroll z-10">
-              {users.data.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <Card
-                      onClick={() => setIsMessage(true)}
-                      username={item.username}
-                      img={
-                        item.photo
-                          ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
-                          : `${process.env.REACT_APP_API_URL}/profile.jpg`
-                      }
-                    />
-                    ;
-                  </div>
-                );
-              })}
+              {users.isLoading ? (
+                <div></div>
+              ) : (
+                users.data.data.map((item, index) =>
+                  item.id !== profile.id ? (
+                    <div key={index}>
+                      <Card
+                        onClick={() => selectReceiver(item)}
+                        username={item.username}
+                        img={
+                          item.photo
+                            ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                            : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                        }
+                      />
+                    </div>
+                  ) : null
+                )
+              )}
             </div>
           </>
         )}
@@ -191,16 +247,40 @@ export default function Chat(params) {
       <div className=" border-solid border-l-[1px] col-span-3 border-grey-color">
         {isMessage ? (
           <div className="relative overflow-hidden">
-            <Headers />
+            <Headers
+              img={
+                receiver.photo
+                  ? `${process.env.REACT_APP_API_URL}/${receiver.photo}`
+                  : `${process.env.REACT_APP_API_URL}/profile.jpg`
+              }
+              user={receiver.username}
+            />
             <div className="min-h-screen pt-28 pb-20 bg-primary">
-              <Bubbles />
-              <BubblesReceived />
-              <Bubbles />
-              <BubblesReceived />
-              <Bubbles />
-              <BubblesReceived />
+              {listChat.map((item, index) => (
+                <div key={index}>
+                  {item.sender === profile.username ? (
+                    <Bubbles
+                      message={item.message}
+                      img={
+                        item.sender_photo
+                          ? `${process.env.REACT_APP_API_URL}/${item.sender_photo}`
+                          : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                      }
+                    />
+                  ) : (
+                    <BubblesReceived
+                      message={item.message}
+                      img={
+                        item.receiver_photo
+                          ? `${process.env.REACT_APP_API_URL}/${item.receiver_photo}`
+                          : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                      }
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-            <Footer />
+            <Footer onSubmit={onSubmitMessage} onChange={e => setMessage(e.target.value)} value={message} />
           </div>
         ) : (
           <div className="flex justify-center items-center h-screen bg-primary">
