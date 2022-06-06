@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
@@ -98,7 +97,7 @@ export default function Chat(params) {
 
   useEffect(() => {
     dispatch(getUser(getQuery));
-  }, []);
+  }, [dispatch, getQuery]);
 
   const users = useSelector(state => {
     return state.user;
@@ -123,7 +122,7 @@ export default function Chat(params) {
   useEffect(() => {
     const socket = io(process.env.REACT_APP_API_URL);
     socket.on('send-message-response', response => {
-      // const receiver = JSON.parse(localStorage.getItem('receiver'));
+      const receiver = JSON.parse(localStorage.getItem('receiver'));
       if (receiver.username === response[0].sender || receiver.username === response[0].receiver) {
         console.log(response);
         setListChat(response);
@@ -135,7 +134,7 @@ export default function Chat(params) {
   const [message, setMessage] = useState('');
   const onSubmitMessage = e => {
     e.preventDefault();
-    // const receiver = JSON.parse(localStorage.getItem('receiver'));
+    const receiver = JSON.parse(localStorage.getItem('receiver'));
 
     const payload = {
       sender: profile.username,
@@ -307,7 +306,7 @@ export default function Chat(params) {
             <div className="h-auto overflow-y-scroll fixed top-0 bottom-0 mt-[300px] left-0 bg-scroll z-10">
               {users.isLoading ? (
                 <div>Loading</div>
-              ) : (
+              ) : users.data.data ? (
                 users.data.data.map((item, index) => {
                   return item.id !== profile.id ? (
                     <div key={index}>
@@ -316,14 +315,14 @@ export default function Chat(params) {
                         username={item.username}
                         img={
                           item.photo
-                            ? `${process.env.REACT_APP_API_URL}/${profile.photo}`
+                            ? `${process.env.REACT_APP_API_URL}/${item.photo}`
                             : `${process.env.REACT_APP_API_URL}/profile.jpg`
                         }
                       />
                     </div>
                   ) : null;
                 })
-              )}
+              ) : null}
             </div>
           </>
         )}

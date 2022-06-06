@@ -10,7 +10,7 @@ export default function Footer(params) {
           <input
             type="text"
             placeholder="Type your message..."
-            className="bg-primary w-full p-2 pl-4 focus:outline-none pr-32 rounded-xl"
+            className="bg-primary w-[820px] p-2 pl-4 focus:outline-none pr-4 rounded-xl"
             onChange={params.onChange}
             value={params.value}
           />
