@@ -39,7 +39,6 @@ export default function Chat(params) {
   const [listChat, setListChat] = useState([]);
 
   const [idMessage, setIdMessage] = useState('');
-  console.log(idMessage);
 
   useEffect(() => {
     dispatch(getDetailUser());
@@ -47,7 +46,6 @@ export default function Chat(params) {
   const detail = useSelector(state => {
     return state.detail.data;
   });
-  console.log(detail);
 
   const [form, setForm] = useState({
     username: detail.username,
@@ -76,7 +74,6 @@ export default function Chat(params) {
       ...form
     };
 
-    console.log(getPhoto.photo);
     if (getPhoto) {
       const changePhoto = new FormData();
       changePhoto.append('photo', getPhoto.photo[0]);
@@ -138,7 +135,7 @@ export default function Chat(params) {
   // Delete Message
   const onDelete = e => {
     setIdMessage(e);
-    deleteMessage(idMessage)
+    deleteMessage(e)
       .then(response => {
         console.log(response);
       })
@@ -371,10 +368,11 @@ export default function Chat(params) {
                     <BubblesReceived
                       message={item.message}
                       img={
-                        item.receiver_photo
-                          ? `${process.env.REACT_APP_API_URL}/${item.receiver_photo}`
+                        receiver.photo
+                          ? `${process.env.REACT_APP_API_URL}/${receiver.photo}`
                           : `${process.env.REACT_APP_API_URL}/profile.jpg`
                       }
+                      delete={() => onDelete(item.id)}
                     />
                   )}
                 </div>
