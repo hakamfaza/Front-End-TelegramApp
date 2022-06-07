@@ -39,6 +39,8 @@ export default function Chat(params) {
 
   const [idMessage, setIdMessage] = useState('');
 
+  const [getErorr, setErorr] = useState('');
+
   useEffect(() => {
     dispatch(getDetailUser());
   }, []);
@@ -75,11 +77,12 @@ export default function Chat(params) {
       ...form
     };
 
-    if (getPhoto) {
-      const changePhoto = new FormData();
-      changePhoto.append('photo', getPhoto.photo[0]);
-
-      updatePhoto(changePhoto)
+    if (!form.username.match(/^[a-zA-Z ']*$/i)) {
+      setErorr('name only alphabet!');
+    } else if (!form.phone.match(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g)) {
+      setErorr('invalid phone number');
+    } else if (form) {
+      updateUser(body)
         .then(response => {
           console.log(response);
           dispatch(getDetailUser());
@@ -87,15 +90,21 @@ export default function Chat(params) {
         .catch(err => {
           console.log(err);
         });
+
+      if (getPhoto) {
+        const changePhoto = new FormData();
+        changePhoto.append('photo', getPhoto.photo[0]);
+
+        updatePhoto(changePhoto)
+          .then(response => {
+            console.log(response);
+            dispatch(getDetailUser());
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
-    updateUser(body)
-      .then(response => {
-        console.log(response);
-        dispatch(getDetailUser());
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
   useEffect(() => {
@@ -221,6 +230,7 @@ export default function Chat(params) {
                   className="mt-3 text-xl font-medium text-center border-b-[1px] border-solid border-dark-color pb-1 focus:outline-none"
                   defaultValue={detail.username}
                   onChange={e => onChange(e, 'username')}
+                  onClick={() => setErorr('')}
                 />
                 {/* <p className="tex-base text-grey-color mt-2">{detail.short_name}</p> */}
               </div>
@@ -232,6 +242,7 @@ export default function Chat(params) {
                   Save
                 </button>
               </div>
+              {getErorr ? <p className="text-red-light text-[13px] mt-2">{getErorr}</p> : null}
               <div className="overflow-y-scroll mt-80 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
                 <p className="text-dark-color font-medium text-lg">Account</p>
                 <input
@@ -239,6 +250,7 @@ export default function Chat(params) {
                   type="text"
                   defaultValue={detail.phone}
                   onChange={e => onChange(e, 'phone')}
+                  onClick={() => setErorr('')}
                   className="w-full mt-2 focus:outline-none"
                 />
                 <label htmlFor="phone" className="text-secondary text-sm mt-1 cursor-pointer">
