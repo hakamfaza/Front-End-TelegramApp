@@ -323,7 +323,7 @@ export default function Chat(params) {
             </div>
             <div className="h-auto overflow-y-scroll fixed top-0 bottom-0 mt-[300px] left-0 bg-scroll z-10">
               {users.isLoading ? (
-                <div>Loading</div>
+                <div></div>
               ) : users.data.data ? (
                 users.data.data.map((item, index) => {
                   return item.id !== profile.id ? (
