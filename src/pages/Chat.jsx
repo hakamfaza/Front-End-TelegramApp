@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 import Card from '../components/card/Card';
@@ -23,7 +23,6 @@ import { RiImageEditLine } from 'react-icons/ri';
 import { deleteMessage } from '../redux/actions/chats';
 
 export default function Chat(params) {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const profile = JSON.parse(localStorage.getItem('user'));
@@ -69,6 +68,7 @@ export default function Chat(params) {
     });
   };
 
+  // Save
   const onSave = () => {
     const body = {
       ...form
@@ -104,6 +104,7 @@ export default function Chat(params) {
     return state.user;
   });
 
+  // Show menu
   const onMenu = () => {
     if (isMenu) {
       setIsMenu(false);
@@ -112,6 +113,7 @@ export default function Chat(params) {
     }
   };
 
+  // Change to edit profile
   const onEditProfile = () => {
     if (isEdit) {
       setIsEdit(false);
@@ -120,12 +122,13 @@ export default function Chat(params) {
     }
     setIsMenu(false);
   };
+
+  //
   useEffect(() => {
     const socket = io(process.env.REACT_APP_API_URL);
     socket.on('send-message-response', response => {
       const receiver = JSON.parse(localStorage.getItem('receiver'));
       if (receiver.username === response[0].sender || receiver.username === response[0].receiver) {
-        console.log(response);
         setListChat(response);
       }
     });
@@ -144,6 +147,7 @@ export default function Chat(params) {
       });
   };
 
+  // Send Message
   const [message, setMessage] = useState('');
   const onSubmitMessage = e => {
     e.preventDefault();
@@ -170,6 +174,7 @@ export default function Chat(params) {
     setMessage('');
   };
 
+  // Select Receiver
   const selectReceiver = item => {
     setListChat([]);
     setActiveReceiver(item);
