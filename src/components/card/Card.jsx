@@ -1,5 +1,4 @@
 import React from 'react';
-import user from '../../assets/users.png';
 
 export default function Card(params) {
   return (

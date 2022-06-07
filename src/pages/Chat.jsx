@@ -42,6 +42,7 @@ export default function Chat(params) {
   useEffect(() => {
     dispatch(getDetailUser());
   }, []);
+
   const detail = useSelector(state => {
     return state.detail.data;
   });
@@ -81,15 +82,16 @@ export default function Chat(params) {
       updatePhoto(changePhoto)
         .then(response => {
           console.log(response);
+          dispatch(getDetailUser());
         })
         .catch(err => {
           console.log(err);
         });
-      return;
     }
     updateUser(body)
       .then(response => {
         console.log(response);
+        dispatch(getDetailUser());
       })
       .catch(err => {
         console.log(err);
@@ -181,6 +183,7 @@ export default function Chat(params) {
     setIsMessage(true);
     localStorage.setItem('receiver', JSON.stringify(item));
     socketio.emit('join-room', profile);
+
     const data = {
       sender: profile.id,
       receiver: item.id
@@ -198,7 +201,7 @@ export default function Chat(params) {
                   onClick={() => onEditProfile()}
                   className="text-secondary text-xl ml-[-5px] cursor-pointer"
                 />
-                <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">{detail.short_name}</p>
+                {/* <p className="text-secondary text-xl text-center ml-24 mt-[-5px]">{detail.short_name}</p> */}
               </div>
               <div className="flex justify-center items-center p-5 flex-col mt-3">
                 <img
