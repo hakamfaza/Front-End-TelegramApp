@@ -12,6 +12,7 @@ export default function Login() {
     email: '',
     password: ''
   });
+  const [getErorr, setErorr] = useState('');
 
   const onChange = (e, field) => {
     setForm({
@@ -27,14 +28,34 @@ export default function Login() {
       password: form.password
     };
 
-    register(body)
-      .then(response => {
-        console.log(response);
-        navigate('/');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (form.username && form.email && form.password) {
+      if (!form.username.match(/^[a-zA-Z ']*$/i)) {
+        setErorr('name only alphabet!');
+      } else if (
+        !form.email.match(
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+      ) {
+        setErorr('wrong email address!');
+      } else if (
+        !form.password.match(/[A-Z]/) ||
+        !form.password.match(/.[!,@,#,$,%,^,&,*,?,_,~,-,(,)]/) ||
+        form.password.length < 7
+      ) {
+        setErorr('password must contain uppercase letters, special characters and at least 8 letters.');
+      } else if (form) {
+        register(body)
+          .then(response => {
+            // console.log(response);
+            navigate('/');
+          })
+          .catch(err => {
+            setErorr(err.response.data.error.toLowerCase());
+          });
+      }
+    } else {
+      setErorr('all inputs must be filled!');
+    }
   };
 
   const onNavigate = () => {
@@ -59,6 +80,7 @@ export default function Login() {
               id="username"
               placeholder="Enter your name"
               onChange={e => onChange(e, 'username')}
+              onClick={() => setErorr('')}
             />
           </div>
           <div className="relative flex flex-col mb-6">
@@ -71,6 +93,7 @@ export default function Login() {
               id="email"
               placeholder="Enter your email"
               onChange={e => onChange(e, 'email')}
+              onClick={() => setErorr('')}
             />
           </div>
           <div className="relative flex flex-col mb-6">
@@ -83,6 +106,7 @@ export default function Login() {
               id="password"
               placeholder="Enter your password"
               onChange={e => onChange(e, 'password')}
+              onClick={() => setErorr('')}
             />
             {visibel ? (
               <AiFillEye
@@ -95,6 +119,7 @@ export default function Login() {
                 onClick={() => setVisible(true)}
               />
             )}
+            {getErorr ? <p className="text-red-light text-[13px]">{getErorr.toLowerCase()}</p> : null}
           </div>
         </form>
 

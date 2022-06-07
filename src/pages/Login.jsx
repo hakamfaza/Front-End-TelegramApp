@@ -39,10 +39,10 @@ export default function Login() {
           login(body)
             .then(response => {
               // console.log(response);
-              // navigate('/chat');
+              navigate('/chat');
             })
             .catch(err => {
-              setErorr(err.response.data.error);
+              setErorr(err.response.data.error.toLowerCase());
             });
         } else {
           setErorr('password must contain uppercase letters, special characters and at least 8 letters.');
@@ -95,7 +95,7 @@ export default function Login() {
                 onClick={() => setVisible(true)}
               />
             )}
-            {getErorr ? <p className="text-red-light text-[13px]">{getErorr.toLowerCase()}</p> : null}
+            {getErorr ? <p className="text-red-light text-[13px]">{getErorr}</p> : null}
           </div>
         </form>
         <p className="text-sm text-secondary flex justify-end cursor-pointer">Forgot password?</p>
