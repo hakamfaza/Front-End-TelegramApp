@@ -10,6 +10,7 @@ export default function Login() {
     email: '',
     password: ''
   });
+  const [getErorr, setErorr] = useState('');
 
   const onChange = (e, field) => {
     e.preventDefault();
@@ -20,19 +21,38 @@ export default function Login() {
   };
 
   const onSubmit = () => {
-    const body = {
-      email: form.email,
-      password: form.password
-    };
-    login(body)
-      .then(response => {
-        console.log(response);
-        navigate('/chat');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      if (
+        form.email.match(
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+      ) {
+        if (
+          form.password.match(/[A-Z]/) &&
+          form.password.match(/.[!,@,#,$,%,^,&,*,?,_,~,-,(,)]/) &&
+          form.password.length >= 8
+        ) {
+          const body = {
+            email: form.email,
+            password: form.password
+          };
+          login(body)
+            .then(response => {
+              // console.log(response);
+              // navigate('/chat');
+            })
+            .catch(err => {
+              setErorr(err.response.data.error);
+            });
+        } else {
+          setErorr('password must contain uppercase letters, special characters and at least 8 letters.');
+        }
+      } else {
+        setErorr('wrong email address!');
+      }
+    } catch (error) {}
   };
+
   return (
     <div className="bg-theme-primary flex items-center justify-center h-screen">
       <div className="drop-shadow-lg w-96 p-9 rounded-3xl bg-primary">
@@ -49,6 +69,7 @@ export default function Login() {
               id="email"
               placeholder="Enter your email"
               onChange={e => onChange(e, 'email')}
+              onClick={() => setErorr('')}
             />
           </div>
           <div className="relative flex flex-col mb-6">
@@ -61,6 +82,7 @@ export default function Login() {
               id="password"
               placeholder="Enter your password"
               onChange={e => onChange(e, 'password')}
+              onClick={() => setErorr('')}
             />
             {visibel ? (
               <AiFillEye
@@ -73,6 +95,7 @@ export default function Login() {
                 onClick={() => setVisible(true)}
               />
             )}
+            {getErorr ? <p className="text-red-light text-[13px]">{getErorr.toLowerCase()}</p> : null}
           </div>
         </form>
         <p className="text-sm text-secondary flex justify-end cursor-pointer">Forgot password?</p>
