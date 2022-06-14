@@ -31,7 +31,7 @@ export default function Login() {
     if (form.username && form.email && form.password) {
       if (!form.username.match(/^[a-zA-Z ']*$/i)) {
         setErorr('name only alphabet!');
-      } else if (
+    } else if (
         !form.email.match(
           /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         )
