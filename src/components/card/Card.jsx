@@ -3,7 +3,7 @@ import React from 'react';
 export default function Card(params) {
   return (
     <div className="flex p-3 cursor-pointer pr-2" onClick={params.onClick}>
-      <img src={params.img} alt="user" className="w-16 h-16 rounded-xl ml-3" />
+      <img src={params.img} alt="user" className="w-14 h-14 rounded-xl ml-1" />
       <div className="p-2 ml-2">
         <p className="text-dark-color text-lg font-medium max-w-sm">{params.username}</p>
         <p className="text-secondary text-sm overflow-hidden text-ellipsis whitespace-nowrap max-w-[169px] inline-block float-right mt-1">
