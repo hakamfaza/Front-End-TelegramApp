@@ -11,9 +11,6 @@ export default function BubblesReceived(params) {
         />
       </div>
       <div className="bg-secondary max-w-sm p-5 rounded-[35px] rounded-bl-xl ml-3 relative">
-        <p className="absolute top-0 right-0 cursor-pointer hover:text-white" onClick={params.delete}>
-          x
-        </p>
         <p className="text-white">{params.message}</p>
       </div>
     </div>

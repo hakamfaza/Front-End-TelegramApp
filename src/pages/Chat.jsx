@@ -20,8 +20,6 @@ import { RiChatSettingsLine } from 'react-icons/ri';
 import { MdOutlineLock, MdOutlineDevicesOther } from 'react-icons/md';
 import { VscGraphLine } from 'react-icons/vsc';
 import { RiImageEditLine } from 'react-icons/ri';
-import { deleteMessage } from '../redux/actions/chats';
-
 export default function Chat(params) {
   const dispatch = useDispatch();
 
@@ -85,7 +83,7 @@ export default function Chat(params) {
     } else if (form) {
       updateUser(body)
         .then(response => {
-          console.log(response);
+          // console.log(response);
           dispatch(getDetailUser());
         })
         .catch(err => {
@@ -98,11 +96,12 @@ export default function Chat(params) {
 
         updatePhoto(changePhoto)
           .then(response => {
-            console.log(response);
+            // console.log(response);
+            setErorr('');
             dispatch(getDetailUser());
           })
           .catch(err => {
-            console.log(err);
+            setErorr(err.response.data.error);
           });
       }
     }
@@ -155,16 +154,15 @@ export default function Chat(params) {
     setSocketio(socket);
   }, []);
 
+  console.log(idMessage);
   // Delete Message
   const onDelete = e => {
-    setIdMessage(e);
-    deleteMessage(e)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    const data = {
+      id: e,
+      sender: profile.id,
+      receiver: receiver.id
+    };
+    socketio.emit('delete-message', data);
   };
 
   // Send Message
@@ -192,6 +190,19 @@ export default function Chat(params) {
         message
       };
       socketio.emit('send-message', data);
+
+      dispatch(() => {
+        const socket = io(process.env.REACT_APP_API_URL);
+        socket.on('send-message-response', response => {
+          const receiver = JSON.parse(localStorage.getItem('receiver'));
+          if (receiver.username === response[0].sender || receiver.username === response[0].receiver) {
+            setListChat(response);
+          }
+        });
+        setSocketio(socket);
+      });
+
+      dispatch(getDetailUser());
       setMessage('');
     }
   };
@@ -254,7 +265,7 @@ export default function Chat(params) {
                 </button>
               </div>
               {getErorr ? <p className="text-red-light text-[13px] mt-2">{getErorr}</p> : null}
-              <div className="overflow-y-scroll mt-80 fixed top-0 bottom-0 max-w-[325px] overflow-hidden">
+              <div className="overflow-y-scroll mt-80 fixed top-0 bottom-0 max-w-[295px] overflow-hidden">
                 <p className="text-dark-color font-medium text-lg">Account</p>
                 <input
                   id="phone"
@@ -441,7 +452,6 @@ export default function Chat(params) {
                           ? `${process.env.REACT_APP_API_URL}/${receiver.photo}`
                           : `${process.env.REACT_APP_API_URL}/profile.jpg`
                       }
-                      delete={() => onDelete(item.id)}
                     />
                   )}
                 </div>
