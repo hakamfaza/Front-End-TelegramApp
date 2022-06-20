@@ -273,7 +273,7 @@ export default function Chat(params) {
                   defaultValue={detail.phone}
                   onChange={e => onChange(e, 'phone')}
                   onClick={() => setErorr('')}
-                  className="w-full mt-2 focus:outline-none"
+                  className="w-[300px] mt-2 focus:outline-none"
                 />
                 <label htmlFor="phone" className="text-secondary text-sm mt-1 cursor-pointer">
                   Tap to change phone number
@@ -285,7 +285,7 @@ export default function Chat(params) {
                     type="text"
                     defaultValue={detail.short_name}
                     onChange={e => onChange(e, 'shortName')}
-                    className="w-full focus:outline-none text-dark font-medium mt-5"
+                    className="w-[300px] focus:outline-none text-dark font-medium mt-5"
                   />
                   <label htmlFor="username" className="text-grey-color font-sm cursor-pointer">
                     Username
@@ -298,7 +298,7 @@ export default function Chat(params) {
                     type="text"
                     defaultValue={detail.bio}
                     onChange={e => onChange(e, 'bio')}
-                    className="w-full focus:outline-none text-dark font-medium mt-5 min-h-[20px] overflow-hidden max-h-20"
+                    className="w-[300px]  focus:outline-none text-dark font-medium mt-5 min-h-[20px] overflow-hidden max-h-20"
                   />
                   <label htmlFor="bio" className="text-grey-color font-sm cursor-pointer">
                     Bio
