@@ -1,5 +1,4 @@
 import React from 'react';
-import user from '../../assets/users.png';
 import { CgMenuGridO } from 'react-icons/cg';
 
 export default function Headers(params) {
@@ -11,7 +10,10 @@ export default function Headers(params) {
           <h5 className="font-medium font-base text-dark-color">{params.user}</h5>
           <p className="text-secondary text-sm">online</p>
         </div>
-        <CgMenuGridO className=" cursor-pointer flex justify-end text-secondary text-3xl right-4 absolute top-9" />
+        <CgMenuGridO
+          className=" cursor-pointer flex justify-end text-secondary text-3xl right-4 absolute top-9"
+          onClick={params.onClick}
+        />
       </div>
     </div>
   );

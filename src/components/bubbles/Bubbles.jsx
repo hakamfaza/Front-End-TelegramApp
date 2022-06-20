@@ -11,7 +11,11 @@ export default function Bubbles(params) {
           <p className="text-dark-color">{params.message}</p>
         </div>
         <div className="relative w-20">
-          <img src={params.img} alt="" className="w-16 h-16 rounded-xl ml-3 cursor-pointer absolute bottom-0 left-0" />
+          <img
+            src={params.img}
+            alt=""
+            className="w-16 h-16 rounded-xl ml-3 cursor-pointer absolute bottom-0 object-cover left-0"
+          />
         </div>
       </div>
     </div>

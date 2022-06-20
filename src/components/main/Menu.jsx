@@ -6,7 +6,7 @@ import { IoCallOutline } from 'react-icons/io5';
 
 export default function Menu(params) {
   return (
-    <div className="bg-secondary w-36 h-60 z-20 absolute rounded-3xl rounded-tr-xl ml-44">
+    <div className="bg-secondary w-36 h-60 z-20 absolute rounded-3xl rounded-tr-xl ml-36">
       <ul className="p-5">
         <li className="flex text-white text-center text-lg cursor-pointer" onClick={params.onProfile}>
           <AiOutlineUser className="mt-1 mr-2 text-lg" />

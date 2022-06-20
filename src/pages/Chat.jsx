@@ -36,6 +36,7 @@ export default function Chat(params) {
   const [getActiveReceiver, setActiveReceiver] = useState({});
   const [getQuery, setQuery] = useState('');
   const [listChat, setListChat] = useState([]);
+  const [isDetail, setIsDetail] = useState(false);
 
   const [idMessage, setIdMessage] = useState('');
 
@@ -134,6 +135,14 @@ export default function Chat(params) {
     setIsMenu(false);
   };
 
+  const onDetailProfile = () => {
+    if (isDetail) {
+      setIsDetail(false);
+    } else {
+      setIsDetail(true);
+    }
+  };
+
   //
   useEffect(() => {
     const socket = io(process.env.REACT_APP_API_URL);
@@ -173,16 +182,18 @@ export default function Chat(params) {
     };
     setListChat([...listChat, payload]);
 
-    const data = {
-      sender: profile.id,
-      receiver: receiver.id,
-      isRead: false,
-      date: new Date(),
-      chatType: 'text',
-      message
-    };
-    socketio.emit('send-message', data);
-    setMessage('');
+    if (message !== '') {
+      const data = {
+        sender: profile.id,
+        receiver: receiver.id,
+        isRead: false,
+        date: new Date(),
+        chatType: 'text',
+        message
+      };
+      socketio.emit('send-message', data);
+      setMessage('');
+    }
   };
 
   // Select Receiver
@@ -220,7 +231,7 @@ export default function Chat(params) {
                       : `${process.env.REACT_APP_API_URL}/profile.jpg`
                   }
                   alt=""
-                  className="w-20 h-20 rounded-3xl ml-3"
+                  className="w-20 h-20 rounded-3xl ml-3 object-cover"
                 />
                 <label htmlFor="photo" className="text-xl cursor-pointer">
                   <RiImageEditLine />
@@ -251,7 +262,7 @@ export default function Chat(params) {
                   defaultValue={detail.phone}
                   onChange={e => onChange(e, 'phone')}
                   onClick={() => setErorr('')}
-                  className="w-full mt-2 focus:outline-none"
+                  className="w-72 mt-2 focus:outline-none"
                 />
                 <label htmlFor="phone" className="text-secondary text-sm mt-1 cursor-pointer">
                   Tap to change phone number
@@ -263,7 +274,7 @@ export default function Chat(params) {
                     type="text"
                     defaultValue={detail.short_name}
                     onChange={e => onChange(e, 'shortName')}
-                    className="w-full focus:outline-none text-dark font-medium mt-5"
+                    className="w-72 focus:outline-none text-dark font-medium mt-5"
                   />
                   <label htmlFor="username" className="text-grey-color font-sm cursor-pointer">
                     Username
@@ -276,7 +287,7 @@ export default function Chat(params) {
                     type="text"
                     defaultValue={detail.bio}
                     onChange={e => onChange(e, 'bio')}
-                    className="w-full focus:outline-none text-dark font-medium mt-5 min-h-[20px] overflow-hidden max-h-20"
+                    className="w-72 focus:outline-none text-dark font-medium mt-5 min-h-[20px] overflow-hidden max-h-20"
                   />
                   <label htmlFor="bio" className="text-grey-color font-sm cursor-pointer">
                     Bio
@@ -326,7 +337,7 @@ export default function Chat(params) {
                       : `${process.env.REACT_APP_API_URL}/profile.jpg`
                   }
                   alt=""
-                  className="w-20 h-20 rounded-3xl ml-3"
+                  className="w-20 h-20 rounded-3xl ml-3 object-cover"
                 />
                 <h5 className="mt-3 text-xl font-medium">{detail.username}</h5>
                 <p className="tex-base text-grey-color">{detail.short_name}</p>
@@ -369,8 +380,46 @@ export default function Chat(params) {
                   ? `${process.env.REACT_APP_API_URL}/${receiver.photo}`
                   : `${process.env.REACT_APP_API_URL}/profile.jpg`
               }
+              onClick={() => setIsDetail(true)}
               user={receiver.username}
             />
+
+            {/* Detail Profile */}
+            {isDetail ? (
+              <div className="z-30 absolute right-0 w-72 h-screen p-5 bg-white shadow-lg">
+                <div className="flex text-center mt-4">
+                  <IoIosArrowBack
+                    onClick={() => onDetailProfile()}
+                    className="text-black text-xl ml-[-5px] cursor-pointer rotate-180"
+                  />
+                  <p className=" text-xl text-center ml-14 mt-[-5px]">{receiver.short_name}</p>
+                </div>
+                <div className="flex items-center justify-center mt-10">
+                  <img
+                    src={
+                      receiver.photo
+                        ? `${process.env.REACT_APP_API_URL}/${receiver.photo}`
+                        : `${process.env.REACT_APP_API_URL}/profile.jpg`
+                    }
+                    alt=""
+                    className="h-24 w-24 rounded-xl ml-3 cursor-pointer"
+                  />
+                </div>
+                <div className="mt-5">
+                  <h1 className="font-medium text-xl">{receiver.username}</h1>
+                  <p className="text-secondary text-sm">online</p>
+                </div>
+                <div className="mt-3">
+                  <h1 className="text-lg font-medium ">Phone Number</h1>
+                  <h1 className="text-md">{receiver.phone}</h1>
+                </div>
+                <div className="mt-3">
+                  <h1 className="text-lg font-medium ">Bio</h1>
+                  <h1 className="text-md">{receiver.bio}</h1>
+                </div>
+              </div>
+            ) : null}
+
             <div className="min-h-screen pt-28 pb-20 bg-primary">
               {listChat.map((item, index) => (
                 <div key={index}>
