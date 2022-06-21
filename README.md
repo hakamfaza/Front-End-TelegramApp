@@ -1,70 +1,97 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1 align="center">TelegramApp</h1>
 
-## Available Scripts
+TelegramApp is an application that is used to communicate with other people. This application has features to change profiles, view other people's profiles, and chat. This application is realtime, so users can use it easily.
 
-In the project directory, you can run:
+<div align="center">
+<img src="https://i.postimg.cc/6pNvcZWF/Group-5856.png" />)
+ </div>
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Demo
+Here is a working live demo :  https://telegram-app-lime.vercel.app/
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+<!-- GETTING STARTED -->
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Get a free API Key at [https://github.com/hakamfaza/Front-End-TelegramApp](https://github.com/hakamfaza/Front-End-TelegramApp)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/hakamfaza/Front-End-TelegramApp.git
+   ```
+3. Install NPM packages
+   ```sh
+   npm install
+   ```
+4. Enter your API in `.env`
+   ```js
+   REACT_APP_API_URL = 'ENTER YOUR API'
+   ```
+## Screenshot
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Login
 
-### `npm run eject`
+[![Screenshot-2022-06-21-005021-2.png](https://i.postimg.cc/bvjyt0RF/Screenshot-2022-06-21-005021-2.png)](https://postimg.cc/xXtVrzhK)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Register
+[![Screenshot-2022-06-21-005056.png](https://i.postimg.cc/x1sr0K4z/Screenshot-2022-06-21-005056.png)](https://postimg.cc/QFWYmWs8)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Home
+[![Screenshot-2022-06-21-005310-2.png](https://i.postimg.cc/B6nXjcSf/Screenshot-2022-06-21-005310-2.png)](https://postimg.cc/Y4TpVFLd)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Chat
+[![Screenshot-2022-06-21-005648-2.png](https://i.postimg.cc/9f7jJDLw/Screenshot-2022-06-21-005648-2.png)](https://postimg.cc/QBhPMdGj)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Detail
+[![Screenshot-2022-06-21-005715.png](https://i.postimg.cc/t4nfHLWL/Screenshot-2022-06-21-005715.png)](https://postimg.cc/PChKWV64)
 
-## Learn More
+### Edit Profile
+[![Screenshot-2022-06-21-005740.png](https://i.postimg.cc/JnpKXqjN/Screenshot-2022-06-21-005740.png)](https://postimg.cc/r0tSX5ns)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Development
+Want to contribute? Great!
 
-### Code Splitting
+To fix a bug or enhance an existing module, follow these steps:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Fork the repo
+- Create a new branch (`git checkout -b improve-feature`)
+- Make the appropriate changes in the files
+- Add changes to reflect the changes made
+- Commit your changes (`git commit -am 'Improve feature'`)
+- Push to the branch (`git push origin improve-feature`)
+- Create a Pull Request 
 
-### Analyzing the Bundle Size
+### Bug / Feature Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+If you find a bug (the website couldn't handle the query and / or gave undesired results), kindly open an issue [here](https://github.com/iharsh234/WebApp/issues/new) by including your search query and the expected result.
 
-### Making a Progressive Web App
+If you'd like to request a new function, feel free to do so by opening an issue [here](https://github.com/iharsh234/WebApp/issues/new). Please include sample queries and their corresponding results.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+## Built with 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- [React.js](https://reactjs.org/) - JavaScript library commonly used when building the UI of a website or web application.
+- [Socket.IO](https://socket.io/) - Socket.io is an opensource real-time engine built on top of Node.js.
+- [Bootstrap](http://getbootstrap.com/) - Extensive list of components and  Bundled Javascript plugins.
 
-### Deployment
+## Contact
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Hakamfaza - [linkedin](https://www.linkedin.com/in/hakamfaza/) - hakamfaza@gmail.com
 
-### `npm run build` fails to minify
+Back End: [https://github.com/hakamfaza/Front-End-TelegramApp](https://github.com/hakamfaza/Front-End-TelegramApp)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## [License](https://github.com/hakamfaza/Front-End-TelegramApp/blob/master/LICENSE)
+
+MIT © [Hakam Faza ](https://github.com/hakamfaza)
+
